@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Weather_Clothing_Suggestion/static/css/main.47e5e85a.css",
+    "main.js": "/Weather_Clothing_Suggestion/static/js/main.b5498fdc.js",
+    "static/js/453.2042cc28.chunk.js": "/Weather_Clothing_Suggestion/static/js/453.2042cc28.chunk.js",
+    "index.html": "/Weather_Clothing_Suggestion/index.html",
+    "main.47e5e85a.css.map": "/Weather_Clothing_Suggestion/static/css/main.47e5e85a.css.map",
+    "main.b5498fdc.js.map": "/Weather_Clothing_Suggestion/static/js/main.b5498fdc.js.map",
+    "453.2042cc28.chunk.js.map": "/Weather_Clothing_Suggestion/static/js/453.2042cc28.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.47e5e85a.css",
+    "static/js/main.b5498fdc.js"
+  ]
+}
