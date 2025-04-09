@@ -17,7 +17,7 @@ const App: React.FC = () => {
     getClothingSuggestion,
   } = useWeather();
 
-  const [backgroundImage, setBackgroundImage] = useState<string>('/default_background.png');
+  const [backgroundImage, setBackgroundImage] = useState<string>('default_background.png');
 
   useEffect(() => {
     if (weatherData) {
