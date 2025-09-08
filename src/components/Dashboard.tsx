@@ -4,6 +4,8 @@ import { getWeatherBackgroundImage } from '../weather/weather-background';
 import WeatherInput from './WeatherInput';
 import WeatherDisplay from './WeatherDisplay';
 import Form from './Form';
+import { useAuth } from '../auth/useAuth';
+import { User } from 'firebase/auth';
 
 const Dashboard: React.FC = () => {
     const {
@@ -18,6 +20,7 @@ const Dashboard: React.FC = () => {
     } = useWeather();
 
     const [backgroundImage, setBackgroundImage] = useState<string>('default_background.png');
+    const { user } = useAuth();
 
     useEffect(() => {
         if (weatherData) {
@@ -39,6 +42,7 @@ const Dashboard: React.FC = () => {
                 e.preventDefault();
                 fetchWeatherByCity(city);
             }}>
+                <WelcomeMsg user={user} />
                 <WeatherInput
                     city={city}
                     onCityChange={setCity}
@@ -64,6 +68,22 @@ const Dashboard: React.FC = () => {
                 />
             )}
         </div>
+    );
+};
+
+interface WelcomeMsgProps {
+    user: User | null;
+}
+
+const WelcomeMsg: React.FC<WelcomeMsgProps> = ({ user }) => {
+    return (
+        <>
+            {user && (
+                <p className="text-2xl font-bold mb-6 text-gray-500 drop-shadow-lg">
+                    👋 Welcome, {user.email}!
+                </p>
+            )}
+        </>
     );
 };
 
