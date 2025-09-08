@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/Weather_Clothing_Suggestion/static/css/main.47e5e85a.css",
-    "main.js": "/Weather_Clothing_Suggestion/static/js/main.b5498fdc.js",
-    "static/js/453.2042cc28.chunk.js": "/Weather_Clothing_Suggestion/static/js/453.2042cc28.chunk.js",
-    "index.html": "/Weather_Clothing_Suggestion/index.html",
-    "main.47e5e85a.css.map": "/Weather_Clothing_Suggestion/static/css/main.47e5e85a.css.map",
-    "main.b5498fdc.js.map": "/Weather_Clothing_Suggestion/static/js/main.b5498fdc.js.map",
-    "453.2042cc28.chunk.js.map": "/Weather_Clothing_Suggestion/static/js/453.2042cc28.chunk.js.map"
+    "main.css": "/what_should_i_wear/static/css/main.0b20dae4.css",
+    "main.js": "/what_should_i_wear/static/js/main.57c82d95.js",
+    "static/media/default_background.png": "/what_should_i_wear/static/media/default_background.dcb956c6de8801da07c3.png",
+    "static/media/logo.svg": "/what_should_i_wear/static/media/logo.3bba867bb0b4568dfc386ede4e5a17ce.svg",
+    "static/media/google.svg": "/what_should_i_wear/static/media/google.f5de8c4b6fe6b05880d1b372df07a71c.svg",
+    "index.html": "/what_should_i_wear/index.html",
+    "static/media/facebook.svg": "/what_should_i_wear/static/media/facebook.8318e30052647e6779483e6f254c039b.svg",
+    "main.0b20dae4.css.map": "/what_should_i_wear/static/css/main.0b20dae4.css.map",
+    "main.57c82d95.js.map": "/what_should_i_wear/static/js/main.57c82d95.js.map"
   },
   "entrypoints": [
-    "static/css/main.47e5e85a.css",
-    "static/js/main.b5498fdc.js"
+    "static/css/main.0b20dae4.css",
+    "static/js/main.57c82d95.js"
   ]
 }
