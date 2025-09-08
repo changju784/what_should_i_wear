@@ -19,7 +19,7 @@ export const SignUpForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-gray-100 rounded-xl">
-            <h2 className="text-xl font-semibold">Sign Up</h2>
+            <h2 className="text-xl font-semibold text-center text-black">Sign Up</h2>
             <input
                 type="email"
                 placeholder="Email"

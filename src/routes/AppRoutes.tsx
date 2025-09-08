@@ -20,7 +20,7 @@ const AppRoutes: React.FC = () => {
             <Route
                 path="/signin"
                 element={
-                    <div className="flex flex-col items-center gap-4 p-6">
+                    <div className="flex flex-col items-center gap-4 p-6 text-white">
                         <SignInForm />
                         <p>
                             Don’t have an account?{" "}
@@ -33,7 +33,7 @@ const AppRoutes: React.FC = () => {
             <Route
                 path="/signup"
                 element={
-                    <div className="flex flex-col items-center gap-4 p-6">
+                    <div className="flex flex-col items-center gap-4 p-6 text-white">
                         <SignUpForm />
                         <p>
                             Already have an account?{" "}
