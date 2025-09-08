@@ -3,6 +3,7 @@ import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import GoogleLogo from "../assets/google.svg";
 import FacebookLogo from "../assets/facebook.svg";
+import Form from "../components/Form";
 
 export const SignInForm: React.FC = () => {
     const { signIn, signInWithGoogle, signInWithFacebook } = useAuth();
@@ -27,10 +28,7 @@ export const SignInForm: React.FC = () => {
     };
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="max-w-md w-full mx-auto p-6 bg-gray-100 rounded-xl space-y-4"
-        >
+        <Form onSubmit={handleSubmit}>
             <h2 className="text-xl font-semibold text-center text-black">Sign In</h2>
 
             {/* Email */}
@@ -86,7 +84,7 @@ export const SignInForm: React.FC = () => {
                 Continue with Facebook
                 <img src={FacebookLogo} alt="Facebook Logo" className="w-5 h-5" />
             </button>
-        </form>
+        </Form>
 
     );
 };

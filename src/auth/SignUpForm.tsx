@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "./useAuth";
+import Form from "../components/Form";
 
 export const SignUpForm = () => {
     const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export const SignUpForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-gray-100 rounded-xl">
+        <Form onSubmit={handleSubmit}>
             <h2 className="text-xl font-semibold text-center text-black">Sign Up</h2>
             <input
                 type="email"
@@ -36,6 +37,6 @@ export const SignUpForm = () => {
             />
             <button className="w-full bg-blue-600 text-white py-2 rounded">Sign Up</button>
             {message && <p className="text-sm text-red-500">{message}</p>}
-        </form>
+        </Form>
     );
 };

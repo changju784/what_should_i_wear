@@ -18,8 +18,12 @@ const WeatherInput: React.FC<Props> = ({ city, onCityChange, onSubmit, onUseLoca
                 Use My Location
             </button>
 
+            <p>
+                OR
+            </p>
+
             <div className="flex flex-col gap-2">
-                <Label.Root htmlFor="city" className="text-white font-medium">
+                <Label.Root htmlFor="city" className="text-black font-medium">
                     Enter city
                 </Label.Root>
                 <input

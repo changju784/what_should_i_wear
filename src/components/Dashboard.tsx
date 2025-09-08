@@ -3,6 +3,7 @@ import { useWeather } from '../weather/use-weather';
 import { getWeatherBackgroundImage } from '../weather/weather-background';
 import WeatherInput from './WeatherInput';
 import WeatherDisplay from './WeatherDisplay';
+import Form from './Form';
 
 const Dashboard: React.FC = () => {
     const {
@@ -34,20 +35,26 @@ const Dashboard: React.FC = () => {
             className="min-h-screen bg-cover bg-center p-8"
             style={{ backgroundImage: `url(${backgroundImage})` }}
         >
-            <WeatherInput
-                city={city}
-                onCityChange={setCity}
-                onSubmit={() => fetchWeatherByCity(city)} // Pass city to fetchWeatherByCity
-                onUseLocation={() => {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => fetchWeatherByLocation(pos.coords.latitude, pos.coords.longitude),
-                        (err) => console.error(err)
-                    );
-                }}
-            />
+            <Form onSubmit={(e) => {
+                e.preventDefault();
+                fetchWeatherByCity(city);
+            }}>
+                <WeatherInput
+                    city={city}
+                    onCityChange={setCity}
+                    onSubmit={() => fetchWeatherByCity(city)} // Pass city to fetchWeatherByCity
+                    onUseLocation={() => {
+                        navigator.geolocation.getCurrentPosition(
+                            (pos) => fetchWeatherByLocation(pos.coords.latitude, pos.coords.longitude),
+                            (err) => console.error(err)
+                        );
+                    }}
+                />
 
-            {loading && <p className="text-white mt-4">Loading...</p>}
-            {error && <p className="text-red-500 mt-4">{error}</p>}
+                {loading && <p className="text-white mt-4">Loading...</p>}
+                {error && <p className="text-red-500 mt-4">{error}</p>}
+
+            </Form>
 
             {weatherData && (
                 <WeatherDisplay
