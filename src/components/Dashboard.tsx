@@ -34,8 +34,6 @@ const Dashboard: React.FC = () => {
             className="min-h-screen bg-cover bg-center p-8"
             style={{ backgroundImage: `url(${backgroundImage})` }}
         >
-            <h1 className="text-4xl font-bold text-white text-center mb-8">What Should I Wear?</h1>
-
             <WeatherInput
                 city={city}
                 onCityChange={setCity}
