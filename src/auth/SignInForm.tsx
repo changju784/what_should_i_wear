@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
-import GoogleLogo from "../assets/google.svg"
-import FacebookLogo from "../assets/facebook.svg"
+import GoogleLogo from "../assets/google.svg";
+import FacebookLogo from "../assets/facebook.svg";
 
 export const SignInForm: React.FC = () => {
     const { signIn, signInWithGoogle, signInWithFacebook } = useAuth();
@@ -10,6 +10,7 @@ export const SignInForm: React.FC = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,9 +29,11 @@ export const SignInForm: React.FC = () => {
     return (
         <form
             onSubmit={handleSubmit}
-            className="space-y-4 p-6 bg-gray-100 rounded-xl max-w-md mx-auto"
+            className="max-w-md w-full mx-auto p-6 bg-gray-100 rounded-xl space-y-4"
         >
             <h2 className="text-xl font-semibold text-center text-black">Sign In</h2>
+
+            {/* Email */}
             <input
                 type="email"
                 placeholder="Email"
@@ -38,16 +41,34 @@ export const SignInForm: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
-            <input
-                type="password"
-                placeholder="Password"
-                className="w-full p-2 border rounded"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">
+
+            {/* Password with eye toggle */}
+            <div className="relative w-full">
+                <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    className="w-full p-2 border rounded pr-10"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-2 flex items-center px-2 text-gray-500"
+                >
+                    {showPassword ? "🙈" : "👁️"}
+                </button>
+            </div>
+
+            {/* Sign In button */}
+            <button
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded"
+            >
                 Sign In
             </button>
+
+            {/* Social login buttons */}
             <button
                 type="button"
                 onClick={signInWithGoogle}
@@ -65,8 +86,7 @@ export const SignInForm: React.FC = () => {
                 Continue with Facebook
                 <img src={FacebookLogo} alt="Facebook Logo" className="w-5 h-5" />
             </button>
-
-
         </form>
+
     );
 };
