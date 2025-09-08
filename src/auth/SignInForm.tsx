@@ -27,6 +27,33 @@ export const SignInForm: React.FC = () => {
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        try {
+            const userCredential = await signInWithGoogle();
+            if (userCredential.user.emailVerified || userCredential.user.emailVerified === undefined) {
+                navigate("/dashboard");
+            } else {
+                alert("Please verify your email before signing in.");
+            }
+        } catch (err: any) {
+            alert(err.message);
+        }
+    };
+
+    const handleFacebookSignIn = async () => {
+        try {
+            const userCredential = await signInWithFacebook();
+            if (userCredential.user.emailVerified || userCredential.user.emailVerified === undefined) {
+                navigate("/dashboard");
+            } else {
+                alert("Please verify your email before signing in.");
+            }
+        } catch (err: any) {
+            alert(err.message);
+        }
+    };
+
+
     return (
         <Form onSubmit={handleSubmit}>
             <h2 className="text-xl font-semibold text-center text-black">Sign In</h2>
@@ -69,7 +96,7 @@ export const SignInForm: React.FC = () => {
             {/* Social login buttons */}
             <button
                 type="button"
-                onClick={signInWithGoogle}
+                onClick={handleGoogleSignIn}
                 className="w-full flex items-center justify-center gap-2 bg-white text-gray-800 border border-gray-300 py-2 rounded hover:bg-gray-100"
             >
                 Continue with Google
@@ -78,7 +105,7 @@ export const SignInForm: React.FC = () => {
 
             <button
                 type="button"
-                onClick={signInWithFacebook}
+                onClick={handleFacebookSignIn}
                 className="w-full flex items-center justify-center gap-2 bg-white text-gray-800 border border-gray-300 py-2 rounded hover:bg-gray-100"
             >
                 Continue with Facebook
