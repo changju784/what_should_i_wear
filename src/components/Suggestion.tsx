@@ -1,0 +1,73 @@
+import React, { useState, useEffect } from "react";
+import { useWeather } from "../weather/use-weather";
+import { getWeatherBackgroundImage } from "../weather/weather-background";
+import WeatherInput from "../components/WeatherInput";
+import WeatherDisplay from "../components/WeatherDisplay";
+import Form from "../components/Form";
+import { BackToDashboardButton } from "./BackToDashboardButton";
+
+const Suggestion: React.FC = () => {
+    const {
+        city,
+        setCity,
+        weatherData,
+        error,
+        loading,
+        fetchWeatherByCity,
+        fetchWeatherByLocation,
+        getClothingSuggestion,
+    } = useWeather();
+
+    const [backgroundImage, setBackgroundImage] = useState<string>("default_background.png");
+
+    useEffect(() => {
+        if (weatherData) {
+            const weatherCondition = weatherData.weather.toLowerCase();
+            getWeatherBackgroundImage(weatherCondition).then((imageUrl) => {
+                if (imageUrl) {
+                    setBackgroundImage(imageUrl);
+                }
+            });
+        }
+    }, [weatherData]);
+
+    return (
+        <div
+            className="min-h-screen bg-cover bg-center p-8"
+            style={{ backgroundImage: `url(${backgroundImage})` }}
+        >
+            <BackToDashboardButton />
+            <Form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    fetchWeatherByCity(city);
+                }}
+            >
+                <WeatherInput
+                    city={city}
+                    onCityChange={setCity}
+                    onSubmit={() => fetchWeatherByCity(city)}
+                    onUseLocation={() => {
+                        navigator.geolocation.getCurrentPosition(
+                            (pos) => fetchWeatherByLocation(pos.coords.latitude, pos.coords.longitude),
+                            (err) => console.error(err)
+                        );
+                    }}
+                />
+
+                {loading && <p className="text-white mt-4">Loading...</p>}
+                {error && <p className="text-red-500 mt-4">{error}</p>}
+            </Form>
+
+            {weatherData && (
+                <WeatherDisplay
+                    temp={weatherData.temp}
+                    weather={weatherData.weather}
+                    suggestion={getClothingSuggestion(weatherData.temp, weatherData.weather)}
+                />
+            )}
+        </div>
+    );
+};
+
+export default Suggestion;

@@ -5,6 +5,8 @@ import { SignUpForm } from "../auth/SignUpForm";
 import Dashboard from "../components/Dashboard";
 import { useAuth } from "../auth/useAuth";
 import { Link } from "react-router-dom"
+import Closet from "../components/Closet";
+import Suggestion from "../components/Suggestion";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const { user, loading } = useAuth();
@@ -51,6 +53,10 @@ const AppRoutes: React.FC = () => {
                     </ProtectedRoute>
                 }
             />
+
+            <Route path="/closet" element={<Closet />} />
+
+            <Route path="/suggestion" element={<Suggestion />} />
         </Routes>
     );
 };

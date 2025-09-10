@@ -1,72 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { useWeather } from '../weather/use-weather';
-import { getWeatherBackgroundImage } from '../weather/weather-background';
-import WeatherInput from './WeatherInput';
-import WeatherDisplay from './WeatherDisplay';
-import Form from './Form';
-import { useAuth } from '../auth/useAuth';
-import { User } from 'firebase/auth';
+import { User } from "firebase/auth";
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 
 const Dashboard: React.FC = () => {
-    const {
-        city,
-        setCity,
-        weatherData,
-        error,
-        loading,
-        fetchWeatherByCity,
-        fetchWeatherByLocation,
-        getClothingSuggestion,
-    } = useWeather();
-
-    const [backgroundImage, setBackgroundImage] = useState<string>('default_background.png');
     const { user } = useAuth();
-
-    useEffect(() => {
-        if (weatherData) {
-            const weatherCondition = weatherData.weather.toLowerCase();
-            getWeatherBackgroundImage(weatherCondition).then((imageUrl) => {
-                if (imageUrl) {
-                    setBackgroundImage(imageUrl);
-                }
-            });
-        }
-    }, [weatherData]);
-
     return (
-        <div
-            className="min-h-screen bg-cover bg-center p-8"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
-            <Form onSubmit={(e) => {
-                e.preventDefault();
-                fetchWeatherByCity(city);
-            }}>
-                <WelcomeMsg user={user} />
-                <WeatherInput
-                    city={city}
-                    onCityChange={setCity}
-                    onSubmit={() => fetchWeatherByCity(city)} // Pass city to fetchWeatherByCity
-                    onUseLocation={() => {
-                        navigator.geolocation.getCurrentPosition(
-                            (pos) => fetchWeatherByLocation(pos.coords.latitude, pos.coords.longitude),
-                            (err) => console.error(err)
-                        );
-                    }}
-                />
+        <div className="min-h-screen flex flex-col items-center justify-center gap-8 p-8">
+            <WelcomeMsg user={user} />
 
-                {loading && <p className="text-white mt-4">Loading...</p>}
-                {error && <p className="text-red-500 mt-4">{error}</p>}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+                {/* Closet card */}
+                <Link
+                    to="/closet"
+                    className="rounded-2xl bg-white shadow-md hover:shadow-xl transition p-6 flex flex-col items-center"
+                >
+                    <span className="text-5xl">👕</span>
+                    <h2 className="text-xl font-semibold mt-4">See what’s in my closet</h2>
+                    <p className="text-gray-500 mt-2 text-center">
+                        View and organize your jackets, pants, T-shirts, shoes, and more.
+                    </p>
+                </Link>
 
-            </Form>
-
-            {weatherData && (
-                <WeatherDisplay
-                    temp={weatherData.temp}
-                    weather={weatherData.weather}
-                    suggestion={getClothingSuggestion(weatherData.temp, weatherData.weather)}
-                />
-            )}
+                {/* Suggestion card */}
+                <Link
+                    to="/suggestion"
+                    className="rounded-2xl bg-white shadow-md hover:shadow-xl transition p-6 flex flex-col items-center"
+                >
+                    <span className="text-5xl">🌦️</span>
+                    <h2 className="text-xl font-semibold mt-4">What should I wear?</h2>
+                    <p className="text-gray-500 mt-2 text-center">
+                        Get weather-based outfit suggestions now, closet-aware in the future.
+                    </p>
+                </Link>
+            </div>
         </div>
     );
 };
@@ -79,7 +46,7 @@ const WelcomeMsg: React.FC<WelcomeMsgProps> = ({ user }) => {
     return (
         <>
             {user && (
-                <p className="text-2xl font-bold mb-6 text-gray-500 drop-shadow-lg">
+                <p className="text-2xl font-bold mb-6 text-white drop-shadow-lg">
                     👋 Welcome, {user.email}!
                 </p>
             )}

@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthProvider";
 import AppRoutes from "./routes/AppRoutes";
 import Header from "./components/Header";
-import DefaultBackground from "./assets/default_background.png"; // import the default background
+import DefaultBackground from "./assets/default_background.png";
 
 const App: React.FC = () => {
   return (
