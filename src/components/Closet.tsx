@@ -1,70 +1,28 @@
 import React, { useState } from "react";
-import { Plus, ChevronDown, ChevronRight, Camera, Pencil } from "lucide-react";
+import { Plus, ChevronDown, ChevronRight, Pencil } from "lucide-react";
 import { BackToDashboardButton } from "./BackToDashboardButton";
 import Form from "./Form";
+import AddByImage from "./AddByImage";
 
 interface ClosetItem {
     id: number;
     name: string;
     category: string;
+    image?: string;
 }
 
-interface AddClosetButtonProps {
-    showMenu: boolean;
-    onToggleMenu: () => void;
-    onTakePhoto: () => void;
-    onManualEntry: () => void;
-}
-
-const AddClosetButton: React.FC<AddClosetButtonProps> = ({
-    showMenu,
-    onToggleMenu,
-    onTakePhoto,
-    onManualEntry,
-}) => (
-    <div className="mb-6 relative flex justify-end">
-        <button
-            onClick={onToggleMenu}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
-        >
-            <Plus className="w-5 h-5" /> Add
-        </button>
-        {showMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                <button
-                    onClick={onTakePhoto}
-                    className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
-                >
-                    <Camera className="w-4 h-4" /> Take a photo
-                </button>
-                <button
-                    onClick={onManualEntry}
-                    className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
-                >
-                    <Pencil className="w-4 h-4" /> Manual Entry
-                </button>
-            </div>
-        )}
-    </div>
-);
+const categories = ["Jackets", "Pants", "T-Shirts", "Shoes"];
 
 const Closet: React.FC = () => {
-    const [closetItems, setClosetItems] = useState<ClosetItem[]>([
-        { id: 1, name: "Blue Denim Jacket", category: "Jackets" },
-        { id: 2, name: "Black T-shirt", category: "T-Shirts" },
-        { id: 3, name: "White Sneakers", category: "Shoes" },
-    ]);
-
+    const [closetItems, setClosetItems] = useState<ClosetItem[]>([]);
     const [expanded, setExpanded] = useState<string | null>(null);
     const [showAddMenu, setShowAddMenu] = useState(false);
-
-    const categories = ["Jackets", "Pants", "T-Shirts", "Shoes"];
+    const [showAddByImage, setShowAddByImage] = useState(false);
 
     const toggleCategory = (category: string) => {
         setExpanded(expanded === category ? null : category);
     };
 
-    // Manual entry handler
     const handleManualEntry = () => {
         setShowAddMenu(false);
         const category = prompt("Enter category (Jackets, Pants, T-Shirts, Shoes):");
@@ -78,10 +36,19 @@ const Closet: React.FC = () => {
         }
     };
 
-    // Take a photo handler (stub)
-    const handleTakePhoto = () => {
+    const handleAddByImage = () => {
         setShowAddMenu(false);
-        alert("Photo capture not implemented yet.");
+        setShowAddByImage(true);
+    };
+
+    const handleImageAdded = (imgSrc: string) => {
+        const category = prompt("Enter category for this image:");
+        if (category && categories.includes(category)) {
+            setClosetItems((prev) => [
+                ...prev,
+                { id: Date.now(), name: "Image Item", category, image: imgSrc },
+            ]);
+        }
     };
 
     return (
@@ -90,12 +57,37 @@ const Closet: React.FC = () => {
             <Form>
                 <h1 className="text-2xl font-bold text-gray-800 mb-6">👕 My Closet</h1>
 
-                <AddClosetButton
-                    showMenu={showAddMenu}
-                    onToggleMenu={() => setShowAddMenu((v) => !v)}
-                    onTakePhoto={handleTakePhoto}
-                    onManualEntry={handleManualEntry}
-                />
+                <div className="mb-6 relative flex justify-end">
+                    <button
+                        onClick={() => setShowAddMenu((v) => !v)}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+                    >
+                        <Plus className="w-5 h-5" /> Add
+                    </button>
+                    {showAddMenu && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                            <button
+                                onClick={handleAddByImage}
+                                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                            >
+                                <Plus className="w-4 h-4" /> Add by image
+                            </button>
+                            <button
+                                onClick={handleManualEntry}
+                                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                            >
+                                <Pencil className="w-4 h-4" /> Manual Entry
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {showAddByImage && (
+                    <AddByImage
+                        onClose={() => setShowAddByImage(false)}
+                        onImageAdded={handleImageAdded}
+                    />
+                )}
 
                 <div className="space-y-4">
                     {categories.map((category) => {
@@ -107,7 +99,6 @@ const Closet: React.FC = () => {
                                 key={category}
                                 className="rounded-2xl bg-white shadow-md border border-gray-200"
                             >
-                                {/* Category Header */}
                                 <button
                                     onClick={() => toggleCategory(category)}
                                     className="w-full flex items-center justify-between p-4 text-left"
@@ -123,16 +114,17 @@ const Closet: React.FC = () => {
                                         </h2>
                                     </div>
                                 </button>
-
-                                {/* Items List */}
                                 {isOpen && (
                                     <div className="px-6 pb-4 space-y-2">
                                         {items.length > 0 ? (
                                             items.map((item) => (
                                                 <div
                                                     key={item.id}
-                                                    className="p-2 rounded-lg border border-gray-200 bg-gray-50"
+                                                    className="p-2 rounded-lg border border-gray-200 bg-gray-50 flex items-center gap-2"
                                                 >
+                                                    {item.image && (
+                                                        <img src={item.image} alt={item.name} className="w-10 h-10 rounded object-cover" />
+                                                    )}
                                                     {item.name}
                                                 </div>
                                             ))
@@ -151,5 +143,4 @@ const Closet: React.FC = () => {
         </div>
     );
 };
-
 export default Closet;
