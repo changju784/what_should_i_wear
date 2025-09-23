@@ -3,18 +3,18 @@ import { X, Image, Camera } from "lucide-react";
 
 interface AddByImageProps {
     onClose: () => void;
-    onImageAdded: (imgSrc: string) => void;
+    onImageReady: (file: File, imgSrc: string) => void;
 }
 
-const AddByImage: React.FC<AddByImageProps> = ({ onClose, onImageAdded }) => {
+const AddByImage: React.FC<AddByImageProps> = ({ onClose, onImageReady }) => {
     const [showCamera, setShowCamera] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Start/stop camera stream
     useEffect(() => {
         let stream: MediaStream | null = null;
         if (showCamera && videoRef.current) {
-            navigator.mediaDevices.getUserMedia({ video: true })
+            navigator.mediaDevices
+                .getUserMedia({ video: true })
                 .then((mediaStream) => {
                     stream = mediaStream;
                     if (videoRef.current) {
@@ -28,37 +28,39 @@ const AddByImage: React.FC<AddByImageProps> = ({ onClose, onImageAdded }) => {
                 });
         }
         return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+            if (stream) stream.getTracks().forEach((t) => t.stop());
         };
     }, [showCamera]);
 
-    // Capture photo from video
-    const handleCapturePhoto = () => {
+    const handleCapturePhoto = async () => {
         if (videoRef.current) {
             const canvas = document.createElement("canvas");
             canvas.width = videoRef.current.videoWidth;
             canvas.height = videoRef.current.videoHeight;
             const ctx = canvas.getContext("2d");
+
             if (ctx) {
                 ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
                 const imgSrc = canvas.toDataURL("image/png");
-                onImageAdded(imgSrc);
+
+                const res = await fetch(imgSrc);
+                const blob = await res.blob();
+                const file = new File([blob], "captured.png", { type: "image/png" });
+
+                onImageReady(file, imgSrc);
                 setShowCamera(false);
                 onClose();
             }
         }
     };
 
-    // Handle file upload
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (ev) => {
                 const imgSrc = ev.target?.result as string;
-                onImageAdded(imgSrc);
+                onImageReady(file, imgSrc);
                 onClose();
             };
             reader.readAsDataURL(file);
@@ -78,10 +80,12 @@ const AddByImage: React.FC<AddByImageProps> = ({ onClose, onImageAdded }) => {
                     <>
                         <h2 className="text-lg font-semibold mb-4">Add Item by Image</h2>
                         <button
-                            onClick={() => document.getElementById("addByImageFileInput")?.click()}
+                            onClick={() =>
+                                document.getElementById("addByImageFileInput")?.click()
+                            }
                             className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition mb-3"
                         >
-                            <Image className="w-5 h-5" /> Use from my devices
+                            <Image className="w-5 h-5" /> Use from my device
                         </button>
                         <input
                             id="addByImageFileInput"
