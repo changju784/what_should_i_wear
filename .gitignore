@@ -18,6 +18,10 @@ frontend/pnpm-debug.log*
 frontend/.env
 frontend/.env.local
 
+# Builds
+frontend/build/
+build/
+
 # =====================
 # Python / Backend
 # =====================
