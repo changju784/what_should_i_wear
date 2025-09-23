@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Depends
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from PIL import Image
@@ -48,6 +48,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(db_user)
     return db_user
 
+@app.get("/users/by-email/{email}", response_model=schemas.User)
+def get_user_by_email(email: str, db: Session = Depends(get_db)):
+    user = db.query(db_models.User).filter(db_models.User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
 
 # ---------- Clothes ----------
 @app.post("/clothes/", response_model=schemas.Clothing)
@@ -57,7 +64,6 @@ def add_clothing(clothing: schemas.ClothingCreate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(db_clothing)
     return db_clothing
-
 
 @app.get("/clothes/{user_id}", response_model=list[schemas.Clothing])
 def get_user_clothes(user_id: int, db: Session = Depends(get_db)):
