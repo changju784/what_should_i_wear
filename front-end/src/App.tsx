@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { AuthProvider } from "./auth/AuthProvider";
 import AppRoutes from "./routes/AppRoutes";
 import Header from "./components/Header";
 import DefaultBackground from "./assets/default_background.png";
+import { AuthProvider } from "./auth/components/AuthProvider";
 
 const App: React.FC = () => {
   return (

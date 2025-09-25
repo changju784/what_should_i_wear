@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
-import { useAuth } from "../auth/useAuth";
 import UserMenu from "./UserMenu";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export default function Header() {
     const { user } = useAuth();

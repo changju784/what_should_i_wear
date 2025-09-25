@@ -1,12 +1,12 @@
 import React, { JSX } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { SignInForm } from "../auth/SignInForm";
-import { SignUpForm } from "../auth/SignUpForm";
+import { SignInForm } from "../auth/components/SignInForm";
+import { SignUpForm } from "../auth/components/SignUpForm";
 import Dashboard from "../components/Dashboard";
-import { useAuth } from "../auth/useAuth";
 import { Link } from "react-router-dom"
-import Closet from "../components/Closet";
+import Closet from "../closet/components/Closet";
 import Suggestion from "../components/Suggestion";
+import { useAuth } from "../auth/hooks/useAuth";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const { user, loading } = useAuth();

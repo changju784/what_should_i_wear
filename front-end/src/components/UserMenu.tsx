@@ -1,6 +1,6 @@
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/hooks/useAuth";
 
 const UserMenu: React.FC = () => {
     const { logOut } = useAuth();

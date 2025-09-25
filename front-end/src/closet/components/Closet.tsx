@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import AddByImage from "../components/AddByImage";
 import ClassificationResult from "../components/ClassificationResult";
-import { BackToDashboardButton } from "./BackToDashboardButton";
-import Form from "../components/Form";
+import { BackToDashboardButton } from "../../components/BackToDashboardButton";
+import Form from "../../components/Form";
 
 type ClosetItem = {
     id: string;

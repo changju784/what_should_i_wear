@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "./useAuth";
-import Form from "../components/Form";
+import { useAuth } from "../hooks/useAuth";
+import Form from "../../components/Form";
 
 export const SignUpForm = () => {
     const [email, setEmail] = useState("");

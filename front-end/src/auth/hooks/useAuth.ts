@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { AuthContext } from "./AuthProvider";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -10,7 +9,8 @@ import {
     sendEmailVerification,
     UserCredential as FirebaseUserCredential,
 } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "../firebase";
+import { AuthContext } from "../components/AuthProvider";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import GoogleLogo from "../assets/google.svg";
-import FacebookLogo from "../assets/facebook.svg";
-import Form from "../components/Form";
+import GoogleLogo from "../../assets/google.svg";
+import FacebookLogo from "../../assets/facebook.svg";
+import Form from "../../components/Form";
 
 export const SignInForm: React.FC = () => {
     const { signIn, signInWithGoogle, signInWithFacebook } = useAuth();

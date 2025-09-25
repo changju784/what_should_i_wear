@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { classifyClothing } from "../api/classify";
+import { classifyClothing } from "../../api/classify";
 
 interface ClassificationResultProps {
     file: File;
@@ -34,8 +34,6 @@ const ClassificationResult: React.FC<ClassificationResultProps> = ({
         };
         runClassification();
     }, [file]);
-
-    console.log(category)
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">

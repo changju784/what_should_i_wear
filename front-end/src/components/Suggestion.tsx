@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useWeather } from "../weather/use-weather";
+import { useWeather } from "../weather/hooks/use-weather";
 import { getWeatherBackgroundImage } from "../weather/weather-background";
-import WeatherInput from "../components/WeatherInput";
-import WeatherDisplay from "../components/WeatherDisplay";
+import WeatherInput from "../weather/components/WeatherInput";
+import WeatherDisplay from "../weather/components/WeatherDisplay";
 import Form from "../components/Form";
 import { BackToDashboardButton } from "./BackToDashboardButton";
 

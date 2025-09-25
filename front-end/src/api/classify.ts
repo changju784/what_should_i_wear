@@ -1,4 +1,3 @@
-// src/api/classify.ts
 export async function classifyClothing(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("file", file);
