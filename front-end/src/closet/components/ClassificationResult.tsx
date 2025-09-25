@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { X } from "lucide-react";
-import { classifyClothing } from "../../api/classify";
+import { useClassification } from "../hooks/use-classification";
 
 interface ClassificationResultProps {
     file: File;
@@ -17,23 +17,11 @@ const ClassificationResult: React.FC<ClassificationResultProps> = ({
     onClose,
     onConfirm,
 }) => {
-    const [loading, setLoading] = useState(true);
-    const [category, setCategory] = useState<string>("Unknown");
+    const { loading, category, setCategory, classify } = useClassification();
 
     useEffect(() => {
-        const runClassification = async () => {
-            try {
-                const predicted = await classifyClothing(file);
-                setCategory(predicted);
-            } catch (err) {
-                console.error("Classification failed:", err);
-                setCategory("Unknown");
-            } finally {
-                setLoading(false);
-            }
-        };
-        runClassification();
-    }, [file]);
+        classify(file);
+    }, [classify, file]);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
