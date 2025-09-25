@@ -8,72 +8,85 @@ import {
     signInWithPopup,
     signOut,
     sendEmailVerification,
+    UserCredential as FirebaseUserCredential,
 } from "firebase/auth";
 import { auth } from "./firebase";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+interface UserCredential extends FirebaseUserCredential {
+    postgresUser?: any; // TODO: Define a proper type for your backend user
+}
+
 export const useAuth = () => {
     const { user, loading } = useContext(AuthContext);
 
-    // Email + password login
-    const signIn = async (email: string, password: string) => {
-        // Sign in with Firebase
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-        // Fetch user from PostgreSQL
-        const response = await fetch(`${API_URL}/users/by-email/${email}`);
-        if (!response.ok) {
-            console.error("User not found in backend. Did signup fail?");
-            throw new Error("User exists in Firebase but not in backend DB");
+    const syncPostgresUser = async (email: string) => {
+        // Check if user exists in db
+        let response = await fetch(`${API_URL}/users/by-email/${email}`);
+        if (response.ok) {
+            return response.json();
         }
 
-        const data = await response.json();
-        console.log("Fetched user from backend:", data);
-
-        return { ...userCredential, backendUser: data };
-    };
-
-
-    // Email + password signup
-    const signUp = async (email: string, password: string) => {
-        // Create user in Firebase
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        if (userCredential.user) {
-            // Send Email verification
-            await sendEmailVerification(userCredential.user);
-        }
-
-        // Create user in PostgreSQL
-        const response = await fetch(`${API_URL}/users/`, {
+        // If not found, create in db
+        response = await fetch(`${API_URL}/users/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 username: email.split("@")[0],
-                email: email,
+                email,
             }),
         });
 
         if (!response.ok) {
-            console.error("Failed to create user in backend");
-        } else {
-            const data = await response.json();
-            console.log("User created in backend:", data);
+            throw new Error("Failed to sync user with backend");
+        }
+        return response.json();
+    };
+
+    // Email + password login
+    const signIn = async (email: string, password: string): Promise<UserCredential> => {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const postgresUser = await syncPostgresUser(email);
+        return { ...userCredential, postgresUser };
+    };
+
+    // Email + password signup
+    const signUp = async (email: string, password: string): Promise<UserCredential> => {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        if (userCredential.user) {
+            await sendEmailVerification(userCredential.user);
         }
 
-        return userCredential;
+        const postgresUser = await syncPostgresUser(email);
+        return { ...userCredential, postgresUser };
     };
 
     // Google OAuth login
-    const signInWithGoogle = async () => {
+    const signInWithGoogle = async (): Promise<UserCredential> => {
         const provider = new GoogleAuthProvider();
-        return signInWithPopup(auth, provider);
+        const userCredential = await signInWithPopup(auth, provider);
+
+        if (!userCredential.user.email) {
+            throw new Error("No email returned from Google account");
+        }
+
+        const postgresUser = await syncPostgresUser(userCredential.user.email);
+        return { ...userCredential, postgresUser };
     };
 
     // Facebook OAuth login
-    const signInWithFacebook = async () => {
+    const signInWithFacebook = async (): Promise<UserCredential> => {
         const provider = new FacebookAuthProvider();
-        return signInWithPopup(auth, provider);
+        const userCredential = await signInWithPopup(auth, provider);
+
+        if (!userCredential.user.email) {
+            throw new Error("No email returned from Facebook account");
+        }
+
+        const postgresUser = await syncPostgresUser(userCredential.user.email);
+        return { ...userCredential, postgresUser };
     };
 
     // Sign out
